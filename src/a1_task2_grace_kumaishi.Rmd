@@ -7,11 +7,56 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(janitor)
+library(palmerpenguins)
+library(here)
+
+# For PCA:
+library(ggfortify)
+
+# For ggplot customization:
+library(readxl)
+library(gghighlight)
+library(lubridate)
+library(plotly)
 ```
 
 ### Introduction:
 
 ### Principal components analysis:
+
+```{r}
+# Read in data:
+
+world_env_vars <- read_csv(here("data", "world_env_vars.csv")) %>% 
+  clean_names() 
+```
+
+```{r}
+# Create PCA dataset
+
+world_env_pca <- world_env_vars %>% 
+  select_if(is.numeric) %>% 
+  drop_na() %>% 
+  scale() %>% 
+  prcomp()
+
+world_env_pca$rotation
+
+world_env_complete <- world_env_vars %>% 
+  drop_na()
+
+autoplot(world_env_pca,
+         data = world_env_complete,
+         colour = "country",
+         loadings = TRUE,
+         loadings.label = TRUE,
+         show.legend = FALSE)+
+  theme_minimal()
+```
+
 
 ### Summary:
 

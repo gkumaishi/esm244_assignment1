@@ -45,14 +45,21 @@ ggplot(data = ramu, aes(x = year, y = individual_count, fill = amphibian_life_st
 
 ```{r}
 # Data wrangling for graph #2
+amphibians$lake_id <- as.character(as.numeric(amphibians$lake_id))
 
 ramu_lakes <- amphibians %>% 
   select("lake_id", "amphibian_species", "amphibian_life_stage", "amphibian_number") %>% 
   filter(amphibian_species == "ramu") %>% 
-  filter(amphibian_life_stage == c("adult", "subadult"))
-
+  filter(amphibian_life_stage == c("adult", "subadult")) %>% 
+  group_by(lake_id) %>% 
+  summarize(ramu_count = sum(amphibian_number)) %>% 
+  slice_max(ramu_count, n = 5)
 ```
 
+```{r}
+# Graph #2
+
+```
 
 
 
