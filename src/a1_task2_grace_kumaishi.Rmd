@@ -1,0 +1,20 @@
+---
+title: "Assignment 1 Task 2"
+author: "Grace Kumaishi"
+date: "1/16/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction:
+
+### Principal components analysis:
+
+### Summary:
+
+
+
+
