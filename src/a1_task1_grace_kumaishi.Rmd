@@ -1,0 +1,58 @@
+---
+title: "Assignment 1 Task 1"
+author: "Grace Kumaishi"
+date: "1/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(readxl)
+library(lubridate)
+library(patchwork)
+```
+
+```{r}
+# Read in data
+
+amphibians <- read_excel(here("data", "sierra_amphibians.xlsx")) %>% 
+  mutate(across(where(is.character), tolower)) # convert all cells to lower case
+```
+
+```{r}
+# Data wrangling
+
+ramu <- amphibians %>% 
+  select("survey_date", "amphibian_species", "amphibian_life_stage", "amphibian_number") %>% 
+  filter(amphibian_life_stage != "eggmass") %>% # select all life stages but eggmass
+  filter(amphibian_species == "ramu") %>% 
+  mutate(year = year(survey_date)) %>% # create new column for 'year'
+  group_by(year, amphibian_life_stage) %>% # group by both year and amphibian life stage in preparation for summing all counts
+  summarize(individual_count = sum(amphibian_number, na.rm = TRUE)) 
+```
+
+```{r}
+# Create graph #1
+
+ggplot(data = ramu, aes(x = year, y = individual_count, fill = amphibian_life_stage)) +
+  geom_col() +
+  facet_wrap(~amphibian_life_stage) +
+  theme_minimal()
+```
+
+```{r}
+# Data wrangling for graph #2
+
+ramu_lakes <- amphibians %>% 
+  select("lake_id", "amphibian_species", "amphibian_life_stage", "amphibian_number") %>% 
+  filter(amphibian_species == "ramu") %>% 
+  filter(amphibian_life_stage == c("adult", "subadult"))
+
+```
+
+
+
+
