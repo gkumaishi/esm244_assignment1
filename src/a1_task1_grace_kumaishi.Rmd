@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(here)
 library(janitor)
@@ -22,7 +22,7 @@ amphibians <- read_excel(here("data", "sierra_amphibians.xlsx")) %>%
   mutate(across(where(is.character), tolower)) # convert all cells to lower case
 ```
 
-```{r}
+```{r, include = FALSE}
 # Data wrangling
 
 ramu <- amphibians %>% 
@@ -34,18 +34,23 @@ ramu <- amphibians %>%
   summarize(individual_count = sum(amphibian_number, na.rm = TRUE)) 
 ```
 
-```{r}
+```{r, include = FALSE}
 # Create graph #1
 
-ggplot(data = ramu, aes(x = year, y = individual_count, fill = amphibian_life_stage)) +
-  geom_col() +
+graph_1 <- ggplot(data = ramu, aes(x = year, y = individual_count)) +
+  geom_col(aes(fill = amphibian_life_stage)) +
+  scale_fill_manual(values = c("coral", "goldenrod2", "cyan4")) +
   facet_wrap(~amphibian_life_stage) +
+  labs(x = "Year",
+       y = "Number of Individuals",
+       title = "Mountain yellow-legged frog count",
+       fill = "Life Stage") +
   theme_minimal()
 ```
 
-```{r}
+```{r, include = FALSE}
 # Data wrangling for graph #2
-amphibians$lake_id <- as.character(as.numeric(amphibians$lake_id))
+amphibians$lake_id <- as.character(as.numeric(amphibians$lake_id)) # convert from numeric to character class
 
 ramu_lakes <- amphibians %>% 
   select("lake_id", "amphibian_species", "amphibian_life_stage", "amphibian_number") %>% 
@@ -53,13 +58,24 @@ ramu_lakes <- amphibians %>%
   filter(amphibian_life_stage == c("adult", "subadult")) %>% 
   group_by(lake_id) %>% 
   summarize(ramu_count = sum(amphibian_number)) %>% 
+  mutate(lake_id = fct_reorder(lake_id, ramu_count)) %>% 
   slice_max(ramu_count, n = 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 # Graph #2
-
+graph_2 <- ggplot(data = ramu_lakes, aes(x = ramu_count, y = lake_id)) +
+  geom_col(fill = "steelblue") +
+  labs(x = "Count (n)",
+       y = "Lake identification number") +
+  theme_minimal()
 ```
 
+```{r, fig.align = "center"}
+# Combine graphs using patchwork
+graph_3 <- graph_1/graph_2
+
+graph_3
+```
 
 
