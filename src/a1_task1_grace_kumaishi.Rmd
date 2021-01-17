@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
 library(here)
 library(janitor)
@@ -15,16 +15,17 @@ library(lubridate)
 library(patchwork)
 ```
 
-```{r}
-# Read in data
+### 1) Read in the data
 
+```{r}
 amphibians <- read_excel(here("data", "sierra_amphibians.xlsx")) %>% 
   mutate(across(where(is.character), tolower)) # convert all cells to lower case
 ```
+### 2) Graph #1
 
-```{r, include = FALSE}
-# Data wrangling
+#### a) Data wrangling:
 
+```{r}
 ramu <- amphibians %>% 
   select("survey_date", "amphibian_species", "amphibian_life_stage", "amphibian_number") %>% 
   filter(amphibian_life_stage != "eggmass") %>% # select all life stages but eggmass
@@ -34,22 +35,26 @@ ramu <- amphibians %>%
   summarize(individual_count = sum(amphibian_number, na.rm = TRUE)) 
 ```
 
-```{r, include = FALSE}
-# Create graph #1
+#### b) Create graph using ggplot:
 
+```{r}
 graph_1 <- ggplot(data = ramu, aes(x = year, y = individual_count)) +
   geom_col(aes(fill = amphibian_life_stage)) +
   scale_fill_manual(values = c("coral", "goldenrod2", "cyan4")) +
   facet_wrap(~amphibian_life_stage) +
   labs(x = "Year",
        y = "Number of Individuals",
-       title = "Mountain yellow-legged frog count",
+       title = "Mountain yellow-legged frog count across life stages and location",
        fill = "Life Stage") +
+  theme(plot.title = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
-```{r, include = FALSE}
-# Data wrangling for graph #2
+### 3) Graph #2
+
+#### a) Data wrangling:
+
+```{r}
 amphibians$lake_id <- as.character(as.numeric(amphibians$lake_id)) # convert from numeric to character class
 
 ramu_lakes <- amphibians %>% 
@@ -62,8 +67,9 @@ ramu_lakes <- amphibians %>%
   slice_max(ramu_count, n = 5)
 ```
 
-```{r, include = FALSE}
-# Graph #2
+#### b) Create graph using ggplot:
+
+```{r}
 graph_2 <- ggplot(data = ramu_lakes, aes(x = ramu_count, y = lake_id)) +
   geom_col(fill = "steelblue") +
   labs(x = "Count (n)",
@@ -71,11 +77,13 @@ graph_2 <- ggplot(data = ramu_lakes, aes(x = ramu_count, y = lake_id)) +
   theme_minimal()
 ```
 
+### 4) Combine graphs 1 & 2 
+
 ```{r, fig.align = "center"}
 # Combine graphs using patchwork
 graph_3 <- graph_1/graph_2
 
 graph_3
 ```
-
+**Figure 1:**
 
