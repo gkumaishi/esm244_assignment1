@@ -50,7 +50,6 @@ world_env_complete <- world_env_vars %>%
 
 autoplot(world_env_pca,
          data = world_env_complete,
-         colour = "country",
          loadings = TRUE,
          loadings.label = TRUE,
          show.legend = FALSE)+
