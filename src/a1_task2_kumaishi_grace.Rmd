@@ -35,10 +35,12 @@ world_env_vars <- read_csv(here("data", "world_env_vars.csv")) %>%
 ```
 
 ```{r}
-# Create PCA dataset
+# Create PCA dataset:
 
 world_env_pca <- world_env_vars %>% 
   select_if(is.numeric) %>% 
+  select(-c(ends_with("_quart"))) %>% # remove any column ending in '_quart'
+  select(-c(ends_with("_month"))) %>% # remove any column ending in '_month'
   drop_na() %>% 
   scale() %>% 
   prcomp()
@@ -48,12 +50,19 @@ world_env_pca$rotation
 world_env_complete <- world_env_vars %>% 
   drop_na()
 
+# Generate PCA plot:
+
 autoplot(world_env_pca,
          data = world_env_complete,
-         loadings = TRUE,
+         colour = "country",
+         loadings = TRUE, 
+         loadings.colour = "darkgray",
          loadings.label = TRUE,
+         loadings.label.colour = "black",
+         loadings.label.vjust = 1,
          show.legend = FALSE)+
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none") # remove legend
 ```
 
 

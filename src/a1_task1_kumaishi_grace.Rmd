@@ -32,7 +32,7 @@ ramu <- amphibians %>%
   filter(amphibian_species == "ramu") %>% 
   mutate(year = year(survey_date)) %>% # create new column for 'year'
   group_by(year, amphibian_life_stage) %>% # group by both year and amphibian life stage in preparation for summing all counts
-  summarize(individual_count = sum(amphibian_number, na.rm = TRUE)) 
+  summarize(individual_count = sum(amphibian_number, na.rm = TRUE))
 ```
 
 #### b) Create graph using ggplot:
