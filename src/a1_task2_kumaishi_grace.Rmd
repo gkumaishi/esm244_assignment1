@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 library(tidyverse)
 library(janitor)
@@ -41,6 +41,7 @@ world_env_pca <- world_env_vars %>%
   select_if(is.numeric) %>% 
   select(-c(ends_with("_quart"))) %>% # remove any column ending in '_quart'
   select(-c(ends_with("_month"))) %>% # remove any column ending in '_month'
+  select(-c("accessibility_to_cities", "aspect")) %>% 
   drop_na() %>% 
   scale() %>% 
   prcomp()
@@ -49,14 +50,16 @@ world_env_pca$rotation
 
 world_env_complete <- world_env_vars %>% 
   drop_na()
+```
 
+```{r}
 # Generate PCA plot:
 
 autoplot(world_env_pca,
          data = world_env_complete,
          colour = "country",
          loadings = TRUE, 
-         loadings.colour = "darkgray",
+         loadings.colour = "gray50",
          loadings.label = TRUE,
          loadings.label.colour = "black",
          loadings.label.vjust = 1,
@@ -67,6 +70,7 @@ autoplot(world_env_pca,
 
 
 ### Summary:
+- Points closer together represent countries that....
 
 
 
