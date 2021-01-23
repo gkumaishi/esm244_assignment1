@@ -24,6 +24,7 @@ library(plotly)
 ```
 
 ### Introduction:
+The data included in this analysis was assembled by earth scientist [Zander Venter](https://www.researchgate.net/profile/Zander_Venter). Venter aquired all data through publicly available remote sensing datasets provided by the [Google Earth Engine](https://earthengine.google.com/). Averages were calculated for each country "at a reduction scale of about 10 km", and include measurements such as temperature, rainfall, elevation, and canopy cover. 
 
 ### Principal components analysis:
 
@@ -41,7 +42,7 @@ world_env_pca <- world_env_vars %>%
   select_if(is.numeric) %>% 
   select(-c(ends_with("_quart"))) %>% # remove any column ending in '_quart'
   select(-c(ends_with("_month"))) %>% # remove any column ending in '_month'
-  select(-c("accessibility_to_cities", "aspect")) %>% 
+  select(-c("accessibility_to_cities", "aspect")) %>% # omit additional 2 columns
   drop_na() %>% 
   scale() %>% 
   prcomp()
@@ -52,6 +53,7 @@ world_env_complete <- world_env_vars %>%
   drop_na()
 ```
 
+### Generate PCA biplot:
 ```{r}
 # Generate PCA plot:
 
@@ -59,7 +61,7 @@ autoplot(world_env_pca,
          data = world_env_complete,
          colour = "country",
          loadings = TRUE, 
-         loadings.colour = "gray50",
+         loadings.colour = "gray60",
          loadings.label = TRUE,
          loadings.label.colour = "black",
          loadings.label.vjust = 1,
@@ -68,6 +70,7 @@ autoplot(world_env_pca,
   theme(legend.position = "none") # remove legend
 ```
 
+**Figure 1**: PCA biplot showing the __ of 188 countries that are not missing data for included components. (Data courtesy of [Zander Venter](https://www.researchgate.net/profile/Zander_Venter))
 
 ### Summary:
 - Points closer together represent countries that....
