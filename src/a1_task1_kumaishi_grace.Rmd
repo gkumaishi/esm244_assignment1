@@ -88,7 +88,7 @@ graph_3 <- graph_1/graph_2
 
 graph_3
 ```
-**Figure 1:** The top graph shows total mountain yellow-legged frog (*Rana muscosa*) counts over each year of the study, faceted by three life stages: "adult" (shown in teal), "subadult" (shown in yellow), and "tadpole" (shown in orange). The bottom graph displays the total counts of adult and subadult individuals of the same species (*R. muscosa*) in the top 5 most populous lakes included in the study. (Data: Knapp et al. 2020)
+**Figure 1:** The top graph shows total mountain yellow-legged frog (*Rana muscosa*) counts over each year of the study, faceted by three life stages: "adult" (shown in orange), "subadult" (shown in yellow), and "tadpole" (shown in teal). The bottom graph displays the total counts of adult and subadult individuals of the same species (*R. muscosa*) in the top 5 most populous lakes included in the study. (Data: Knapp et al. 2020).
 
 ### Citation
 [Knapp, R.A., C. Pavelka, E.E. Hegeman, and T.C. Smith. 2020. The Sierra Lakes Inventory Project: Non-Native fish and community composition of lakes and ponds in the Sierra Nevada, California ver 2. Environmental Data Initiative.](https://doi.org/10.6073/pasta/d835832d7fd00d9e4466e44eea87fab3)
