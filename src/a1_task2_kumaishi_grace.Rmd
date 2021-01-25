@@ -39,12 +39,12 @@ world_env_vars <- read_csv(here("data", "world_env_vars.csv")) %>%
 # Create PCA dataset:
 
 world_env_pca <- world_env_vars %>% 
-  select_if(is.numeric) %>% 
+  select_if(is.numeric) %>% # select only numeric values
   select(-c(ends_with("_quart"))) %>% # remove any column ending in '_quart'
   select(-c(ends_with("_month"))) %>% # remove any column ending in '_month'
   select(-c("accessibility_to_cities", "aspect")) %>% # omit additional 2 columns
-  drop_na() %>% 
-  scale() %>% 
+  drop_na() %>% #drop NAs
+  scale() %>% # scale data with different orders of magnitude
   prcomp()
 
 world_env_pca$rotation
@@ -56,24 +56,28 @@ world_env_complete <- world_env_vars %>%
 ### Generate PCA biplot:
 ```{r}
 # Generate PCA plot:
+# Assumptions: linear relationships between variables, continuous measured variables, suffifient sample size
 
 autoplot(world_env_pca,
          data = world_env_complete,
          colour = "country",
          loadings = TRUE, 
-         loadings.colour = "gray60",
-         loadings.label = TRUE,
-         loadings.label.colour = "black",
-         loadings.label.vjust = 1,
-         show.legend = FALSE)+
+         loadings.colour = "gray60", # changes colors of the arrows
+         loadings.label = TRUE, # displays variables
+         loadings.label.colour = "black", # change font color
+         loadings.label.vjust = 1) +
+  #geom_text(aes(label = country), col = "gray50", size = 2) + # use this to add country names
   theme_minimal() +
   theme(legend.position = "none") # remove legend
 ```
 
-**Figure 1**: PCA biplot showing the __ of 188 countries that are not missing data for included components. (Data courtesy of [Zander Venter](https://www.researchgate.net/profile/Zander_Venter))
+**Figure 1**: This PCA biplot was created using observations of 188 countries that were not missing data for included components. The loading variables for the first two principal components are shown with gray arrows and labeled accordingly. The location of each country shows their overall location in multivariate space. The length of a loading variable line indicates variance; the shorter the line, the smaller the variance in that principal component's direction. The angle between each line indicates correlation between loading variables. (Data courtesy of [Zander Venter](https://www.researchgate.net/profile/Zander_Venter)).
 
 ### Summary:
-- Points closer together represent countries that....
+- Arrows that are approximately opposite of each other (180 degrees) on the biplot represent two variables that are highly negatively correlated (eg. mean annual temperature and cropland cover). 
+- There is a very small correlation between any two arrows that have an angle of 90 or 270 degrees (eg. slope and annual temperature range). 
+- Arrows that are very close together are highly positively correlated (eg. wind and elevation). 
+- Clusters of points represent countries have many similarities, whereas points that are far apart represent countries that are more different. 
 
 
 
